@@ -1,30 +1,31 @@
 import React, { useState } from "react";
+import { Search } from "lucide-react";
 
 export default function SearchBar({ onSearch }) {
-  const [ingredient, setIngredient] = useState("");
+  const [input, setInput] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (ingredient.trim()) onSearch(ingredient.trim());
+    if (input.trim()) onSearch(input);
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex justify-center gap-2 mb-6"
+      className="flex items-center w-full max-w-2xl mb-8"
     >
       <input
         type="text"
-        placeholder="Enter an ingredient (e.g., chicken)"
-        value={ingredient}
-        onChange={(e) => setIngredient(e.target.value)}
-        className="border-2 border-rose-400 rounded-lg px-4 py-2 w-64 focus:outline-none focus:border-rose-600"
+        placeholder='Try "chicken, eggs, garlic"...'
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        className="flex-grow px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
       />
       <button
         type="submit"
-        className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg"
+        className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-r-lg flex items-center justify-center"
       >
-        🔍 Search
+        <Search size={20} />
       </button>
     </form>
   );

@@ -1,11 +1,14 @@
-// Handles API calls to TheMealDB
-export async function fetchRecipesByIngredient(ingredient) {
+// Using TheMealDB API for free recipe lookups
+const BASE_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
+
+export async function fetchRecipes(ingredients) {
   try {
-    const response = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`
-    );
+    const query = ingredients.trim().replace(/\s+/g, "_");
+    const response = await fetch(`${BASE_URL}${query}`);
     const data = await response.json();
-    return data.meals ?? [];
+
+    if (data.meals) return data.meals;
+    return [];
   } catch (error) {
     console.error("Error fetching recipes:", error);
     return [];
@@ -14,11 +17,11 @@ export async function fetchRecipesByIngredient(ingredient) {
 
 export async function fetchRecipeDetails(id) {
   try {
-    const response = await fetch(
+    const res = await fetch(
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
     );
-    const data = await response.json();
-    return data.meals?.[0] ?? null;
+    const data = await res.json();
+    return data.meals ? data.meals[0] : null;
   } catch (error) {
     console.error("Error fetching recipe details:", error);
     return null;

@@ -3,38 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recipe Ideas</title>
-    <link rel="stylesheet" href="/src/index.css" />
+    <title>Taylor’s Recipe Ideas</title>
   </head>
-  <body>
-    <div class="app-container">
-      <header>
-        <h1>Recipe Ideas</h1>
-      </header>
-
-      <main>
-        <div class="input-section">
-          <label for="ingredients">Enter your ingredients:</label>
-          <textarea
-            id="ingredients"
-            placeholder="Example: 2 eggs, 1 cup flour, milk"
-          ></textarea>
-          <button id="generate-btn">Search Recipes</button>
-        </div>
-
-        <div class="output-section">
-          <h2>Recipe Suggestions</h2>
-          <div id="recipes" class="recipes-list">
-            <p>No recipes yet. Enter ingredients and click search!</p>
-          </div>
-        </div>
-      </main>
-
-      <footer>
-        <p>©Recipe Ideas</p>
-      </footer>
-    </div>
-
-    <script type="module" src="/src/main.js"></script>
+  <body class="bg-gray-50 text-gray-800 min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

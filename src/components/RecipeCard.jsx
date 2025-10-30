@@ -1,18 +1,18 @@
 import React from "react";
 
-export default function RecipeCard({ recipe, onClick }) {
+export default function RecipeCard({ recipe, onSelect }) {
   return (
     <div
-      onClick={onClick}
-      className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+      onClick={() => onSelect(recipe.idMeal)}
+      className="cursor-pointer bg-white shadow-lg rounded-xl overflow-hidden hover:scale-105 transform transition-all duration-200"
     >
       <img
         src={recipe.strMealThumb}
         alt={recipe.strMeal}
-        className="w-full h-40 object-cover"
+        className="w-full h-48 object-cover"
       />
-      <div className="p-3">
-        <h3 className="text-lg font-semibold text-rose-700">
+      <div className="p-3 text-center">
+        <h3 className="font-semibold text-lg text-orange-600">
           {recipe.strMeal}
         </h3>
       </div>
