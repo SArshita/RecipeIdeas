@@ -1,52 +1,47 @@
-// api/extract.js
-export default async function handler(req, res) {
+export default async function handler(request, response) {
   try {
-    const { ingredients } = req.body || {};
+    const { ingredients } = await request.json();
 
     if (!ingredients) {
-      return res.status(400).json({ error: "No ingredients provided" });
+      return response.status(400).json({ error: "No ingredients provided" });
     }
 
     const prompt = `
-        You are a helpful culinary assistant.
+        You are a smart recipe assistant.
         Given ingredients: ${ingredients}.
-        Return ONLY a JSON array of possible Indian and global recipes.
-        Each recipe must have:
-        - "name": the recipe name
-        - "region": cuisine or origin (prioritize Indian recipes)
-        - "ingredients": list of ingredients with quantity if possible
-        - "steps": list of steps in simple English
-        Respond in valid JSON only.
+        Suggest 3–5 recipes, prioritizing INDIAN cuisine if possible.
+        Each recipe must be valid JSON with:
+        - "name"
+        - "region"
+        - "ingredients"
+        - "steps"
+        Respond ONLY with a JSON array.
       `;
 
-    const apiRes = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
-        }),
-      }
-    );
+    const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
 
-    const data = await apiRes.json();
+    const data = await aiRes.json();
+    let recipes = [];
 
-    // Try to parse JSON from the AI response
-    let recipes;
     try {
       recipes = JSON.parse(data.choices?.[0]?.message?.content || "[]");
     } catch {
       recipes = [];
     }
 
-    res.status(200).json(recipes);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server Error" });
+    return response.status(200).json(recipes);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: "Server Error" });
   }
 }
