@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Search } from "lucide-react";
+const Search = () => (
+  <span role="img" aria-label="search">
+    🔍
+  </span>
+);
 
 export default function SearchBar({ onSearch }) {
   const [input, setInput] = useState("");
