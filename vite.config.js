@@ -3,10 +3,10 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    outDir: "dist",
-  },
   server: {
-    allowedHosts: ["*"],
+    allowedHosts: ["pz68h9-4173.csb.app"], // 👈 Add this line
+  },
+  preview: {
+    allowedHosts: ["pz68h9-4173.csb.app", "localhost", ".vercel.app"],
   },
 });
