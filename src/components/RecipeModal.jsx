@@ -1,42 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function RecipeModal({ recipe, onClose }) {
+export default function RecipeModal({ meal, onClose }) {
+  const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    async function fetchDetails() {
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
+      );
+      const data = await res.json();
+      setDetails(data.meals[0]);
+    }
+    fetchDetails();
+  }, [meal.idMeal]);
+
+  if (!details) return null;
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50">
-      <div className="bg-white rounded-xl max-w-2xl w-full p-6 relative shadow-xl overflow-y-auto max-h-[90vh]">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-3xl overflow-y-auto max-h-[90vh]">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg font-bold"
+          className="float-right text-gray-500 hover:text-black font-bold text-xl"
         >
           ✕
         </button>
 
-        <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">
-          {recipe.strMeal}
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          {details.strMeal}
         </h2>
-
         <img
-          src={recipe.strMealThumb}
-          alt={recipe.strMeal}
-          className="rounded-lg mb-4 w-full object-cover"
+          src={details.strMealThumb}
+          alt={details.strMeal}
+          className="w-full h-64 object-cover rounded-lg mb-4"
         />
 
-        <h3 className="font-semibold text-lg mb-2">Ingredients</h3>
-        <ul className="list-disc list-inside text-sm text-gray-700 mb-4">
-          {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => {
-            const ingredient = recipe[`strIngredient${n}`];
-            const measure = recipe[`strMeasure${n}`];
-            return ingredient ? (
-              <li key={n}>
-                {ingredient} — {measure}
+        <h3 className="text-xl font-semibold mt-4 mb-2">Ingredients</h3>
+        <ul className="list-disc list-inside text-gray-700 mb-4">
+          {Array.from({ length: 20 }, (_, i) => i + 1)
+            .map((i) => ({
+              ingredient: details[`strIngredient${i}`],
+              measure: details[`strMeasure${i}`],
+            }))
+            .filter((item) => item.ingredient)
+            .map((item, index) => (
+              <li key={index}>
+                {item.ingredient} - {item.measure}
               </li>
-            ) : null;
-          })}
+            ))}
         </ul>
 
-        <h3 className="font-semibold text-lg mb-2">Instructions</h3>
-        <p className="text-sm text-gray-700 whitespace-pre-line">
-          {recipe.strInstructions}
+        <h3 className="text-xl font-semibold mt-4 mb-2">Instructions</h3>
+        <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+          {details.strInstructions}
         </p>
       </div>
     </div>

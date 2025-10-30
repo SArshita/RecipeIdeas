@@ -6,24 +6,24 @@ export default function SearchBar({ onSearch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (input.trim()) onSearch(input);
+    onSearch(input);
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center w-full max-w-2xl mb-8"
+      className="flex items-center bg-white rounded-full shadow-md overflow-hidden"
     >
       <input
         type="text"
-        placeholder='Try "chicken, eggs, garlic"...'
+        placeholder="Enter ingredients (e.g., chicken, eggs, garlic)..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        className="flex-grow px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+        className="flex-grow px-5 py-3 text-gray-700 focus:outline-none"
       />
       <button
         type="submit"
-        className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-r-lg flex items-center justify-center"
+        className="bg-pink-500 hover:bg-pink-600 text-white px-5 py-3 flex items-center justify-center"
       >
         <Search size={20} />
       </button>
