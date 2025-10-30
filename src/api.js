@@ -23,16 +23,26 @@ export async function fetchRecipesByIngredients(input) {
     throw new Error("Please enter at least one valid ingredient.");
   }
 
-  // Fetch recipes for each ingredient
-  const requests = ingredients.map((ing) =>
-    fetch(
-      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(
-        ing
-      )}`
-    )
-      .then((res) => res.json())
-      .then((data) => data.meals || [])
-  );
+  const handleSearch = async () => {
+    if (!input.trim()) return;
+    setLoading(true);
+    setResults([]);
+
+    try {
+      const response = await fetch("/api/extract.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ingredients: input }),
+      });
+
+      const data = await response.json();
+      setResults(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error fetching recipes:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Prioritize recipes that have the ingredient name in title
   const prioritized = data.sort((a, b) => {
